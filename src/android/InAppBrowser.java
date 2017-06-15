@@ -941,7 +941,7 @@ public class InAppBrowser extends CordovaPlugin {
          * @param webView
          * @param url
          */
-        /*@Override
+        @Override
         public boolean shouldOverrideUrlLoading(WebView webView, String url) {
             if (url.startsWith(WebView.SCHEME_TEL)) {
                 try {
@@ -992,12 +992,22 @@ public class InAppBrowser extends CordovaPlugin {
                 } catch (android.content.ActivityNotFoundException e) {
                     LOG.e(LOG_TAG, "Error sending sms " + url + ":" + e.toString());
                 }
+		   if (url.startsWith("cdvfile:")) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(url));
+                    cordova.getActivity().startActivity(intent);
+                    return true;
+                } catch (android.content.ActivityNotFoundException e) {
+                    LOG.e(LOG_TAG, "Error converting " + url + ": " + e.toString());
+                }
+            } 
             }
 		
             return false;
-        }*/
+        }
 	    /*OVERRIDEN: DEJA PASAR AL OS CUALQUIER PROTOCOLO QUE NO SEA HTTP O HTTPS*/
-	    @Override
+	    /*@Override
 public boolean shouldOverrideUrlLoading(WebView view, String url) {
     if(url.startsWith("https:")||url.startsWith("http:")) {
         return false;
@@ -1006,7 +1016,7 @@ public boolean shouldOverrideUrlLoading(WebView view, String url) {
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     view.getContext().startActivity( intent );
     return true;
-}
+}*/
 
 
         /*
